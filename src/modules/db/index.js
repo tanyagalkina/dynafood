@@ -5,14 +5,33 @@ import { DB_STRING } from '../../config/index.js';
 const Client = pg.Client;
 const Pool = pg.Pool;
 
-const connectionString =  'postgres://' + process.env.DB_USER + ':' + process.env.DB_PASSWORD + DB_STRING
 
-export const poolExample = () => {
+//const connectionString = `postgresql://${process.env.PG_USER}:${process.env.PG_PASSWORD}@${process.env.PG_HOST}:${process.env.PG_PORT}/${process.env.PG_DATABASE}`;
+const connectionString =  process.env.NODE_ENV === 'production' ? process.env.DATABASE_URL : `postgres://${process.env.DB_USER}:${process.env.DB_PASSWORD}${DB_STRING}`
+
+
+export const poolExample = (req, res) => {
 
     console.log('[EXAMPLE] I am DB Pool example func')
 
-    const pool = new Pool({
-        connectionString,
+    let pool;
+    
+    if (process.env.NODE_ENV  == 'production')
+    
+       { pool = new Pool({
+    
+            connectionString: process.env.DATABASE_URL,
+            max: 20,
+            idleTimeoutMillis: 30000,
+            connectionTimeoutMillis: 2000,
+            ssl: {
+                 rejectUnauthorized: false,
+                },
+            });
+        } 
+
+    else pool = new Pool({
+        connectionString: connectionString,
         max: 20,
         idleTimeoutMillis: 30000,
         connectionTimeoutMillis: 2000,
@@ -29,22 +48,82 @@ export const poolExample = () => {
             return console.error('Error executing query', err.stack)
             }
         console.log(result.rows)
+        res.status(200).send(result.rows)
         })
     })    
-
 }
 
-export function connect() {
-    let db_adm_conn = new Client({
-        connectionString
-    });
-    db_adm_conn.on('error', error => {
-        connect();
-    });
-    db_adm_conn.connect().catch(() => { connect() });
-    return db_adm_conn
+let db_adm_conn;
+if (process.env.NODE_ENV !== 'production') {
+    db_adm_conn = new Client({
+        connectionString,
+      });    
+
+} else {
+    db_adm_conn = new Client({
+    connectionString: process.env.DATABASE_URL,
+    ssl: {
+      rejectUnauthorized: false
+    }
+  });
 }
-let db_adm_conn = connect()
+  
+db_adm_conn.connect();
+
+  
+export const showTables = (req, res) => { 
+    let string; 
+  db_adm_conn.query('SELECT table_schema,table_name FROM information_schema.tables;', (err, res) => {
+    if (err) throw err;
+    //console.log(res.rows)
+    string = JSON.stringify(res.rows[2])
+    for (let row of res.rows) {
+        console.log(JSON.stringify(row));
+    }
+    //db_adm_conn.end();
+});
+
+res.status(200).send(JSON.stringify(res.rows[0]))
+
+}  
+
+// export function connect() {
+//     let db_adm_conn;
+//     if (process.env.NODE_ENV !== 'production') {
+//         db_adm_conn = new Client({
+//             connectionString
+//         });
+//     }
+//     else {
+//         db_adm_conn = new Client({
+//             connectionString,
+//             ssl: {
+//                 rejectUnauthorized: false
+//             }
+//         });
+//     }
+//     db_adm_conn.on('error', error => {
+//         connect();
+//     });
+//     db_adm_conn.connect().catch(() => { connect() });
+//     return db_adm_conn
+// }
+// let db_adm_conn = connect()
+
+
+export const whatTimePGQL = (res, req) => {
+
+    db_adm_conn.query('SELECT NOW()', (err, result) => {
+        if (err) {
+            res.status(500).json(err.stack)
+
+            return console.error('Error executing query', err.stack)
+        }
+    console.log(result.rows)
+    //db_adm_conn.end();
+    res.status(200).send(result.rows)
+    })
+}
 
 export const getEcho = async (req, res) => {
     res.send(JSON.stringify(req.query));

@@ -5,7 +5,7 @@ import { DB_STRING } from '../../config/index.js';
 //const Client = pg.Client;
 const Pool = pg.Pool;
 
-import { PG_USER, PG_PASSWORD, PG_DATABASE } from '../../config/index.js'
+import { PG_USER, PG_PASSWORD, PG_DATABASE, NODE_ENV, PG_HOST, PG_PORT, DATABASE_URL } from '../../config/index.js'
 
 const isProduction = process.env.NODE_ENV === "production";
 const db_uri = "postgres://enpwwhercphrri:6b23f247ecde2bf94b70d9be61d3e5fa037cc0bc3f360a6626933d955a48a608@ec2-52-208-185-143.eu-west-1.compute.amazonaws.com:5432/dfeof044pkurt3";
@@ -13,23 +13,40 @@ const connectionString = `postgresql://${process.env.PG_USER}:${process.env.PG_P
 export const dbPool2 = (req, res) => { 
 
     console.log(
-        process.env.PG_USER,
-        process.env.PG_PASSWORD,
-        process.env.PG_HOST,
-        process.env.PG_PORT,
-        process.env.PG_DATABASE)    
+        process.env.NODE_ENV,
+        PG_USER,
+        PG_PASSWORD,
+        PG_HOST,
+        PG_PORT,
+        PG_DATABASE,
+        DATABASE_URL
+        )    
 
-    const pool = new Pool({
+let pool;
+    
+if (process.env.NODE_ENV  == 'production')
+
+   { pool = new Pool({
 
     connectionString: db_uri, 
     //connectionString: isProduction ? process.env.DATABASE_URL : connectionString,
     max: 20,
     idleTimeoutMillis: 30000,
     connectionTimeoutMillis: 2000,
-    // ssl: {
-    //     rejectUnauthorized: false,
-    // },
-});
+    ssl: {
+         rejectUnauthorized: false,
+        },
+    });
+    } else {
+    pool = new Pool({
+
+    connectionString: connectionString, 
+    //connectionString: isProduction ? process.env.DATABASE_URL : connectionString,
+    max: 20,
+    idleTimeoutMillis: 30000,
+    connectionTimeoutMillis: 2000 });
+
+ }   
 
 pool.connect((err, client, release) => {
              if (err) {
@@ -44,7 +61,6 @@ pool.connect((err, client, release) => {
                  res.status(200).send(result.rows)        
                 })
             })
-
 
 }
 

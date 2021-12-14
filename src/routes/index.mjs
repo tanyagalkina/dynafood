@@ -7,6 +7,7 @@ import cookieParser from 'cookie-parser';
 import { getProduct } from '../modules/barcode_scanner.js'
 import {getEcho, getUsers, getUser, deleteUser, postUser} from '../modules/db/index.js'
 import logger from '../middleware/logger.js'
+import { dbPool2 } from '../modules/sketches/herokupgsql.js'
 
 // import {
 //     login
@@ -25,6 +26,7 @@ router.get('/welcome', (req, res) => {
     res.status(200).send("Welcome 🙌 ");
 
 })
+router.get('/pg', dbPool2)
 
 router.get('/products/barcode/:barcode', getProduct)
 router.get('/echo', getEcho)

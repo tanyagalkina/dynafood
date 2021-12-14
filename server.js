@@ -13,8 +13,10 @@ import cookieParser from 'cookie-parser';
 // import jwt from 'express-jwt';
 import cors from 'cors'; //dont know what is it for
 import { poolExample } from './src/modules/db/index.js'
+import { dbPool2} from './src/modules/sketches/herokupgsql.js'
 
-poolExample();
+//poolExample();
+//dbPool2();
 
 const STRING = "HELLO STRING";
 

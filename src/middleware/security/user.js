@@ -45,7 +45,7 @@ export const checkUserIdReq = (req, res, next) => {
     next()
 }
 
-export const checkCreateUserReq = (req, res, next) => {
+export const checkCreateUserReq = async (req, res, next) => {
     const { error, value } = schema.validate(req.body)
     if (error != undefined) {
         res.send(400).send({"Error": error})

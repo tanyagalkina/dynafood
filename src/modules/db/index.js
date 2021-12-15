@@ -55,7 +55,7 @@ export const poolExample = (req, res) => {
     })    
 }
 
-let db_adm_conn;
+export let db_adm_conn;
 if (process.env.NODE_ENV !== 'production') {
     db_adm_conn = new Client({
         connectionString,

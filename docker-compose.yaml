@@ -42,4 +42,6 @@ services:
     environment:
       - "DB_USER=postgres"
       - "DB_PASSWORD=password"
+      - "DB_STRING=@db:5432/postgres"
+      - "JWT_SECRET=dynafood_secret"
     command: npm start  

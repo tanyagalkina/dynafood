@@ -5,6 +5,7 @@ import { json } from 'express';
 import cookieParser from 'cookie-parser';
 import { getProduct } from '../modules/barcode_scanner.js'
 import { getUser, deleteUser, createUser, getToken } from '../modules/db/userManagement.js'
+import { getSettings } from '../modules/db/settingsManagement.js';
 //import { getEcho, getUsers } from '../modules/db/index.js'
 import {
     getEcho
@@ -50,6 +51,8 @@ router.delete('/user', secureRouteMiddleware, checkUserIdReq, deleteUser)
 
 router.get('/token', getToken);
 router.get('/login', getToken);
+
+router.get('/settings', secureRouteMiddleware, getSettings);
 
 router.get('/history/', checkGetElementsFromHistoryReq, getElementsFromHistory)
 router.delete('/history/:elementID', checkDeleteElementReq, deleteElementFromHistory)

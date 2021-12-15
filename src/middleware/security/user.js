@@ -1,6 +1,6 @@
 import { db_adm_conn } from "../../modules/db/index.js";
 import Joi from "joi";
-
+import { checkInputBeforeSqlQuery } from "../../modules/db/scripts.js"
 const schema = Joi.object({
     firstName   : Joi.string()
                     .pattern(new RegExp('^[a-zA-Z\s\-]'))
@@ -48,13 +48,13 @@ export const checkUserIdReq = (req, res, next) => {
 export const checkCreateUserReq = async (req, res, next) => {
     const { error, value } = schema.validate(req.body)
     if (error != undefined) {
-        res.send(400).send({"Error": error})
+        res.status(400).send({"Error": error})
         return
     }
     let prevCheckEmail = await db_adm_conn.query(`
         SELECT email
         FROM EndUser
-        WHERE endUserID = ${checkInputBeforeSqlQuery(req.body.email)}`)
+        WHERE email = '${checkInputBeforeSqlQuery(req.body.email)}'`)
     if (prevCheckEmail.rowCount != 0) {
         res.status(409).send({"Error": "email already exists"})
         return

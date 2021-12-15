@@ -68,7 +68,7 @@ export const createUser = async (req, res) =>
                 '${req.body.email}',
                 '${req.body.phoneNumber}', 
                 '${passcode}',
-                '${req.body.emailConfirmed}'
+                true
             ) RETURNING *;`);
         res.send(newUser.rows[0]);
         return;

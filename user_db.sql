@@ -61,6 +61,9 @@ CREATE TABLE IF NOT EXISTS Restriction
     restrictionName VARCHAR(50) NOT NULL 
 );
 
+INSERT INTO Restriction (restrictionID, restrictionName) VALUES ('f1dc1c61-ec72-41d2-968b-946ef9ef22b3', 'nutz');
+INSERT INTO Restriction (restrictionID, restrictionName) VALUES ('f2dc1c61-ec72-41d2-968b-946ef9ef22b3', 'deez');
+
 CREATE TABLE IF NOT EXISTS EndUser_Restriction
 (
     connectionID uuid PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -76,6 +79,9 @@ CREATE TABLE IF NOT EXISTS EndUser_Restriction
             REFERENCES Restriction(restrictionID)
             ON DELETE CASCADE
 );
+
+INSERT INTO EndUser_Restriction (alertActivation, endUserId, restrictionID) VALUES (true, '123e4567-e89b-12d3-a456-426614174000', 'f1dc1c61-ec72-41d2-968b-946ef9ef22b3');
+INSERT INTO EndUser_Restriction (alertActivation, endUserId, restrictionID) VALUES (true, '123e4567-e89b-12d3-a456-426614174000', 'f2dc1c61-ec72-41d2-968b-946ef9ef22b3');
 
 CREATE TABLE IF NOT EXISTS History
 (

@@ -72,19 +72,13 @@ db_adm_conn.connect();
 
   
 export const showTables = (req, res) => { 
-    let string; 
-  db_adm_conn.query('SELECT table_schema,table_name FROM information_schema.tables;', (err, res) => {
-    if (err) throw err;
-    //console.log(res.rows)
-    string = JSON.stringify(res.rows[2])
-    for (let row of res.rows) {
-        console.log(JSON.stringify(row));
-    }
-    //db_adm_conn.end();
-});
-
-res.status(200).json({"msg" : "showtables function"})
-
+    db_adm_conn.query('SELECT table_schema,table_name FROM information_schema.tables;', (err, res) => {
+        if (err) throw err;
+        for (let row of res.rows) {
+            console.log(JSON.stringify(row));
+        }
+    });
+    res.status(200).json({"msg" : "showtables function"})
 }  
 
 // export function connect() {
@@ -116,11 +110,9 @@ export const whatTimePGQL = (res, req) => {
     db_adm_conn.query('SELECT NOW()', (err, result) => {
         if (err) {
             res.status(500).json(err.stack)
-
             return console.error('Error executing query', err.stack)
         }
     console.log(result.rows)
-    //db_adm_conn.end();
     res.status(200).send(result.rows)
     })
 }

@@ -1,8 +1,6 @@
 import pg from 'pg'
 
 import { DB_STRING } from '../../config/index.js';
-// const port = 8081
-//const Client = pg.Client;
 const Pool = pg.Pool;
 
 import { PG_USER, PG_PASSWORD, PG_DATABASE, NODE_ENV, PG_HOST, PG_PORT, DATABASE_URL } from '../../config/index.js'
@@ -13,8 +11,6 @@ const db_uri = "postgres://enpwwhercphrri:6b23f247ecde2bf94b70d9be61d3e5fa037cc0
 const connectionString = `postgresql://${process.env.PG_USER}:${process.env.PG_PASSWORD}@${process.env.PG_HOST}:${process.env.PG_PORT}/${process.env.PG_DATABASE}`;
 export const dbPool2 = (req, res) => {
     
-        console.log(req.data);
-
         console.log(
             process.env.NODE_ENV,
             PG_USER,

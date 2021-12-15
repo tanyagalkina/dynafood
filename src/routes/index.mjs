@@ -28,10 +28,12 @@ router.get('/welcome', (req, res) => {
 
 })
 
+//DB TEST FUNCS
 router.get('/pg', dbPool2)
 router.get('/pgtables', showTables)
 router.get('/time', poolExample)
 
+//
 router.get('/products/barcode/:barcode', getProduct)
 router.get('/echo', getEcho)
 router.get('/users', getUsers)

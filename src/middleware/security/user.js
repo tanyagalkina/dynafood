@@ -1,7 +1,6 @@
 import { db_adm_conn } from "../../modules/db/index.js";
 import { checkInputBeforeSqlQuery } from '../../modules/db/scripts.js';
 import Joi from "joi";
-import { checkInputBeforeSqlQuery } from "../../modules/db/scripts.js"
 const schema = Joi.object({
     firstName   : Joi.string()
                     .pattern(new RegExp('^[a-zA-Z\s\-]'))

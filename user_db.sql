@@ -14,8 +14,11 @@ CREATE TABLE IF NOT EXISTS EndUser
     phoneNumber VARCHAR(20) NOT NULL,
     passcode VARCHAR(72) NOT NULL,
     emailConfirmed BOOLEAN NOT NULL,
-    currentOAuthUserID uuid
+    currentOAuthUserID uuid,
+    currentAccessToken uuid
 );
+
+INSERT INTO EndUser (endUserID, firstName, lastName, userName, email, phoneNumber, passcode, emailConfirmed) VALUES ('123e4567-e89b-12d3-a456-426614174000', 'test', 'user', 'testitest', 'test@test.com', '0000', 'password', true);
 
 CREATE TABLE IF NOT EXISTS OAuthUser
 (
@@ -61,6 +64,7 @@ CREATE TABLE IF NOT EXISTS Restriction
 CREATE TABLE IF NOT EXISTS EndUser_Restriction
 (
     connectionID uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+    alertActivation BOOLEAN NOT NULL,
     endUserID uuid NOT NULL,
     restrictionID uuid NOT NULL,
     CONSTRAINT fk_endUser
@@ -70,5 +74,19 @@ CREATE TABLE IF NOT EXISTS EndUser_Restriction
     CONSTRAINT fk_restrictionID
         FOREIGN KEY(restrictionID)
             REFERENCES Restriction(restrictionID)
+            ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS History
+(
+    historyID uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+    endUserID uuid NOT NULL,
+    barcode VARCHAR(20) NOT NULL,
+    productName VARCHAR(100) NOT NULL,
+    lastUsed timestamp default current_timestamp,
+    pictureLink VARCHAR(200),
+    CONSTRAINT fk_endUser
+        FOREIGN KEY(endUserID)
+            REFERENCES EndUser(endUserID)
             ON DELETE CASCADE
 );

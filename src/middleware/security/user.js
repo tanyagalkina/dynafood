@@ -1,24 +1,23 @@
-import db_adm_conn from "../../modules/db/index.js";
-import _Joi from 'joi';
+import { db_adm_conn } from "../../modules/db/index.js";
 import Joi from "joi";
 
-const schema = _Joi.object({
-    firstName   : _Joi.string()
+const schema = Joi.object({
+    firstName   : Joi.string()
                     .pattern(new RegExp('^[a-zA-Z\s\-]'))
                     .min(3)
                     .max(20)
                     .required(),
-    lastName    : _Joi.string()
+    lastName    : Joi.string()
                     .pattern(new RegExp('^[a-zA-Z\s\-]'))
                     .min(3)
                     .max(20)
                     .required(),
-    userName    : _Joi.string()
+    userName    : Joi.string()
                     .pattern(new RegExp('^[a-zA-Z0-9]'))
                     .min(3)
                     .max(20)
                     .required(),
-    email       : _Joi.string()
+    email       : Joi.string()
                     .email(
                         {
                             minDomainSegments: 2,
@@ -27,12 +26,12 @@ const schema = _Joi.object({
                             }
                         })
                     .required(),
-    phoneNumber : _Joi.string()
+    phoneNumber : Joi.string()
                     .pattern(new RegExp('^[0-9\s\+]'))
                     .min(8)
                     .max(20)
                     .required(),
-    passcode    : _Joi.string()
+    password    : Joi.string()
                     .min(8)
                     .max(72)
                     .required()
@@ -46,7 +45,7 @@ export const checkUserIdReq = (req, res, next) => {
     next()
 }
 
-export const checkCreateUserReq = async (req, res, next) => {
+export const checkCreateUserReq = (req, res, next) => {
     const { error, value } = schema.validate(req.body)
     if (error != undefined) {
         res.send(400).send({"Error": error})

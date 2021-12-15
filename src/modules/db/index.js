@@ -83,7 +83,7 @@ export const showTables = (req, res) => {
     //db_adm_conn.end();
 });
 
-res.status(200).send(JSON.stringify(res.rows[0]))
+res.status(200).json({"msg" : "showtables function"})
 
 }  
 

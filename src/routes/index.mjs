@@ -1,5 +1,5 @@
 import { Router } from 'express'
-// const router = Router();
+const router = Router();
 import { urlencoded } from 'express';
 import { json } from 'express';
 import cookieParser from 'cookie-parser';

@@ -62,12 +62,12 @@ export const createUser = async (req, res) =>
         INSERT INTO EndUser (firstName, lastName, userName, email, phoneNumber, passcode, emailConfirmed)
         VALUES 
             (
-                '${req.body.firstName}',
-                '${req.body.lastName}',
-                '${req.body.userName}',
-                '${req.body.email}',
-                '${req.body.phoneNumber}', 
-                '${passcode}',
+                '${checkInputBeforeSqlQuery(req.body.firstName)}',
+                '${checkInputBeforeSqlQuery(req.body.lastName)}',
+                '${checkInputBeforeSqlQuery(req.body.userName)}',
+                '${checkInputBeforeSqlQuery(req.body.email)}',
+                '${checkInputBeforeSqlQuery(req.body.phoneNumber)}', 
+                '${checkInputBeforeSqlQuery(passcode)}',
                 true
             ) RETURNING *;`);
         const userid = user.rows[0].enduserid;

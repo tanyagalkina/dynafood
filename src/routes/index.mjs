@@ -2,8 +2,8 @@ import { Router } from 'express'
 const router = Router();
 import { urlencoded } from 'express';
 import { json } from 'express';
-import cookieParser from 'cookie-parser'; 
-
+import cookieParser from 'cookie-parser';
+//import { getEcho, getUsers } from '../modules/db/index.js'
 import {
     getEcho
    ,getUsers
@@ -14,7 +14,6 @@ import logger from '../middleware/logger.js'
 
 
 import { dbPool2 } from '../modules/sketches/herokupgsql.js'
-import { secureRouteMiddleware } from '../middleware/security/secureRouting.js'
 
 router.use(json({limit: '200kb'}));
 router.use(urlencoded({extended: true}));

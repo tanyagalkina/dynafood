@@ -2,8 +2,6 @@ import Express from 'express'
 import http from 'http'
 import path from 'path'
 import logger from './src/middleware/logger.js'
-
-import morgan from 'morgan'
 import swaggerUI from 'swagger-ui-express'
 import swaggerJSDoc from 'swagger-jsdoc'
 
@@ -12,7 +10,7 @@ import historyRouter from './src/routes/historyRoutes.mjs'; //DIR_IMPORT NOT SUP
 import productRouter from './src/routes/productRoutes.mjs'; //DIR_IMPORT NOT SUPPORTED
 import settingRouter from './src/routes/settingsRoutes.mjs'; //DIR_IMPORT NOT SUPPORTED
 import userRouter from './src/routes/userRoutes.mjs'; //DIR_IMPORT NOT SUPPORTED
-import { HOST, PORT, DB_STRING} from './src/config/index.js';
+import { HOST, PORT} from './src/config/index.js';
 export const app = new Express(); 
 const server = new http.Server(app);
 import cookieParser from 'cookie-parser';
@@ -58,4 +56,4 @@ app.use(logger);
 
 server.listen(PORT, () =>
 
-console.log(`[LOGGER] The server is listening on port ${PORT} and nb ${STRING}`))
+console.log(`[LOGGER] The server is listening on port ${PORT} and ${STRING}`))

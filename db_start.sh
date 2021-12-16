@@ -7,7 +7,15 @@ print_col() {
     tput sgr0
 }
 
-docker-compose down --remove-orphans && docker volume rm apidynafood_db_data
-print_col 2 "BUILDING DB ... => "
-docker-compose -f docker-compose.db.yaml up
+if [ "$1" == "new" ]
+    then 
+    print_col 1 "DELETING DB AND ITS VOLUME ... => "
+    docker-compose down --remove-orphans -v
+    print_col 2 "REBUILDING DB ... => "
+    docker-compose -f docker-compose.db.yaml up --build
+else 
+    print_col 2 "BUILDING DB ... => "
+    docker-compose down --remove-orphans
+    docker-compose -f docker-compose.db.yaml up -d --build
+fi    
 exit

@@ -21,7 +21,8 @@ services:
     environment:
       - "POSTGRES_USER=postgres"
       - "POSTGRES_PASSWORD=password"
-
+      - "POSTGRES_DB=dynaFood"
+      
   adminer:
     networks:
         - back-tier

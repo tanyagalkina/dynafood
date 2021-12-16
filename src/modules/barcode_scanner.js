@@ -115,7 +115,7 @@ const getEcoScore = (data) => {
 }
 
 export const getProduct = async (req, res) => {
-    console.log(req.params.barcode)
+    //console.log(req.params.barcode)
     try {
         const userID = "123e4567-e89b-12d3-a456-426614174000"//here insert checking for existing acces_token in EndUser and find user
         

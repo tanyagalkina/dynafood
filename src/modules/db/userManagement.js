@@ -71,7 +71,7 @@ export const createUser = async (req, res) =>
                 true
             ) RETURNING *;`);
         const userid = user.rows[0].enduserid;
-        const token = jwt.sign({ userid: userid, password: req.body.password }, process.env.JWT_SECRET, { expiresIn: "1h" });
+        const token = jwt.sign({ userid: userid, password: req.body.password }, 'dynafood_secret', { expiresIn: "1h" });
         res.cookie("token", token, {
             httpOnly: true,
         });

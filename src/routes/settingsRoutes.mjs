@@ -87,6 +87,7 @@ router.get('/settings', secureRouteMiddleware, getSettings);
  *           type: array
  *           items:
  *             $ref: '#/components/schemas/Settings'
+ *         required: true
  *     responses:
  *       200:
  *         description: No errors.
@@ -115,9 +116,10 @@ router.post('/settings', secureRouteMiddleware, getRestrictionIdByName, postSett
  *         description: JWT user got on login.
  *       - in: body
  *         schema:
- *            type: object
+ *            type: array
  *            items:
  *              $ref: '#/components/schemas/Settings'
+ *         required: true
  *     responses:
  *       200:
  *         description: No errors.

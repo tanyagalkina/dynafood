@@ -10,11 +10,12 @@ const getInnerIngredients = (ingredient) => {
     if (typeof ingredient.ingredients != "undefined" && ingredient.ingredients != null) {
         for (var i = 0; i  < ingredient.ingredients.length; i++) {
             var tmp = {
-                name: ingredient.ingredients[i].text,
+                name: ingredient.ingredients[i].text.toLowerCase().replace(/(^\w{1})|(\s{1}\w{1})/g, match => match.toUpperCase()),
                 vegan: ingredient.ingredients[i].vegan,
                 vegetarian: ingredient.ingredients[i].vegetarian,
                 ingredients : getInnerIngredients(ingredient.ingredients[i])
             }
+            //console.log(tmp.name)
             if (tmp.vegan) {
                 vegan = true
             }
@@ -51,7 +52,7 @@ const getNutriments = (nutriments) => {
             iron : nutriments.iron_100g,
             proteins : nutriments.proteins_100g,
             salt : nutriments.salt_100g,
-            saturated_fat : nutriments['saturated-fat_100g'],
+            'saturated fat' : nutriments['saturated-fat_100g'],
             sodium : nutriments.sodium_100g,
             sugars : nutriments.sugars_100g,
             trans_fat : nutriments['trans-fat_100g'],
@@ -114,6 +115,7 @@ const getEcoScore = (data) => {
 }
 
 export const getProduct = async (req, res) => {
+    console.log(req.params.barcode)
     try {
         const userID = "123e4567-e89b-12d3-a456-426614174000"//here insert checking for existing acces_token in EndUser and find user
         
@@ -162,9 +164,11 @@ export const getProduct = async (req, res) => {
             if (product.data.product && product.data.product.nutriments) {
                 response.nutriments_g_pro_100g = getNutriments(product.data.product.nutriments)
             }
+            console.log(response.nutriments_g_pro_100g);
             insertIntoHistory(userID, req.params.barcode, response)
             response.nutriments_scores = getNutrimentsScore(product.data.product)
         }
+
 
         res.status(200).send(response)
     } catch(error) {

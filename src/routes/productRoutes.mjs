@@ -122,9 +122,6 @@ import { secureRouteMiddleware } from '../middleware/security/secureRouting.js'
  *           type: array
  *           items:
  *              $ref: '#/components/schemas/Ingredients'
- * 
-
- *    
  */
 
 /**
@@ -179,7 +176,7 @@ import { secureRouteMiddleware } from '../middleware/security/secureRouting.js'
 
 /**
  * @swagger
- * /products/barcode:
+ * /products/barcode/{id}:
  *   get:
  *     summary: get a product via barcode
  *     parameters:

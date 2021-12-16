@@ -58,7 +58,7 @@ export const createUser = async (req, res) =>
 {
     try {
         const passcode = await bcrypt.hash(req.body.password, 10)
-        let newUser = await db_adm_conn.query(`
+        let user = await db_adm_conn.query(`
         INSERT INTO EndUser (firstName, lastName, userName, email, phoneNumber, passcode, emailConfirmed)
         VALUES 
             (
@@ -70,7 +70,12 @@ export const createUser = async (req, res) =>
                 '${passcode}',
                 true
             ) RETURNING *;`);
-        res.send(newUser.rows[0]);
+        const userid = user.rows[0].enduserid;
+        const token = jwt.sign({ userid: userid, password: req.body.password }, process.env.JWT_SECRET, { expiresIn: "1h" });
+        res.cookie("token", token, {
+            httpOnly: true,
+        });
+        res.status(200).send(token);
         return;
     } catch (error)  {
         res.status(400).send({"Error": "Unable to create new User.", "Details": `${error}`});

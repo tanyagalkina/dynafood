@@ -78,7 +78,7 @@ export const createUser = async (req, res) =>
         res.status(200).send(token);
         return;
     } catch (error)  {
-        res.status(400).send({"Error": "Unable to create new User.", "Details": `${error}`});
+        res.status(400).send({"Error": "Unable to create new User.", "Details": `${error.stack}`});
         return;
     }
 };

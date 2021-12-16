@@ -4,7 +4,7 @@ import path from 'path'
 import logger from './src/middleware/logger.js'
 
 import router from './src/routes/index.mjs'; //DIR_IMPORT NOT SUPPORTED
-import { HOST, PORT, DB_STRING} from './src/config/index.js';
+import { HOST, PORT } from './src/config/index.js';
 export const app = new Express(); 
 const server = new http.Server(app);
 import cookieParser from 'cookie-parser';
@@ -26,4 +26,4 @@ app.use(logger);
 
 server.listen(PORT, () =>
 
-console.log(`[LOGGER] The server is listening on port ${PORT} and nb ${STRING}`))
+console.log(`[LOGGER] The server is listening on port ${PORT} and ${STRING}`))

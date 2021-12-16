@@ -1,6 +1,6 @@
 import pg from 'pg'
 
-import { DB_STRING } from '../../config/index.js';
+//import { DB_STRING } from '../../config/index.js';
 const Pool = pg.Pool;
 
 import { PG_USER, PG_PASSWORD, PG_DATABASE, NODE_ENV, PG_HOST, PG_PORT, DATABASE_URL } from '../../config/index.js'

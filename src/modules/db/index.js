@@ -1,15 +1,17 @@
 import pg from 'pg'
 
-import { DB_STRING } from '../../config/index.js';
+import { PG_USER, PG_PASSWORD, PG_HOST, PG_PORT, PG_DATABASE } from '../../config/index.js';
 
-// const port = 8081
 const Client = pg.Client;
 const Pool = pg.Pool;
 
+console.log('this is db_vars:', 
+process.env.DB_USER, process.env.DB_PORT, process.env.DB_HOST, process.env.DB_DATABASE);
+
 //const connectionString =  'postgres://' + process.env.DB_USER + ':' + process.env.DB_PASSWORD + DB_STRING
 
-//const connectionString = `postgresql://${process.env.PG_USER}:${process.env.PG_PASSWORD}@${process.env.PG_HOST}:${process.env.PG_PORT}/${process.env.PG_DATABASE}`;
-const connectionString =  process.env.NODE_ENV === 'production' ? process.env.DATABASE_URL : `postgres://${process.env.DB_USER}:${process.env.DB_PASSWORD}${DB_STRING}`
+const connectionString = `postgresql://${process.env.PG_USER}:${process.env.PG_PASSWORD}@${process.env.PG_HOST}:${process.env.PG_PORT}/${process.env.PG_DATABASE}`;
+//const connectionString =  process.env.NODE_ENV === 'production' ? process.env.DATABASE_URL : `postgres://${process.env.DB_USER}:${process.env.DB_PASSWORD}${DB_STRING}`
 
 
 export const poolExample = (req, res) => {

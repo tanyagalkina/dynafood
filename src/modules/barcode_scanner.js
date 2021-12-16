@@ -124,7 +124,7 @@ export const getProduct = async (req, res) => {
             categories: [],
             qualities: [],
             warings: [],
-            ecoscoreData: [],
+            ecoscoreData: null,
             packing: [],
             images: [],
             ingredients: [],

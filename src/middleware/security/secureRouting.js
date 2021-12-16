@@ -1,5 +1,6 @@
 import jwt from 'jsonwebtoken';
 
+
 export const secureRouteMiddleware = (req, res, next) => {
     const token = req.cookies.token;
     try {

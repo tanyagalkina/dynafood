@@ -22,7 +22,7 @@ export const deleteElementFromHistory = async (req, res) => {
 }
 
 export const getElementsFromHistory = async (req, res) => {
-    const userID = checkInputBeforeSqlQuery(req.query.userID);
+    const userID = checkInputBeforeSqlQuery(req.user.userid);
     var response = await db_adm_conn.query(`
     SELECT H.historyID, H.barcode, H.productName, H.lastUsed, H.pictureLink
     FROM History H

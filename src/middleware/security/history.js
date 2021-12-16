@@ -1,6 +1,7 @@
 // import { deleteElementFromHistory, getElementsFromHistory } from '../../modules/db/historyManagement.js'
 import db_adm_conn from "../../modules/db/index.js";
 
+
 export const checkDeleteElementReq = async (req, res, next) => {
     //check access_token here
 
@@ -16,7 +17,7 @@ export const checkDeleteElementReq = async (req, res, next) => {
 export const checkGetElementsFromHistoryReq = async (req, res, next) => {
     //check access_token here
 
-    var userID = req.query.userID
+    var userID = req.user.userid
     if (typeof userID == "undefined" || userID == null) {
         res.status(400).send('userID is missing')
         return

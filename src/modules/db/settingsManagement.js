@@ -9,7 +9,7 @@ export const getSettings = async (req, res) => {
                 JOIN EndUser_Restriction USING (restrictionID)
                 WHERE endUserID = '${checkInputBeforeSqlQuery(req.user.userid)}';`);
         if (userSettings.rows.length == 0) {
-            res.status(404).send({ "Error": "User does not have any settings." });
+            res.status(204);
             return
         }
         res.status(200).send(userSettings.rows);

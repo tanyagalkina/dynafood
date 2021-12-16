@@ -5,8 +5,6 @@ import { urlencoded } from 'express';
 import { secureRouteMiddleware } from '../middleware/security/secureRouting.js'
 import { getSettings, postSettings, patchSettings, deleteSettings } from '../modules/db/settingsManagement.js';
 import { getRestrictionIdByName, hasRestriction } from '../middleware/settings.js'
-router.get('/settings', secureRouteMiddleware, getSettings);
-router.post('/settings', secureRouteMiddleware, postSettings);
 
 /**
  * @swagger

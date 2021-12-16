@@ -19,6 +19,7 @@ import { checkUserIdReq, checkCreateUserReq } from '../middleware/security/user.
 import { getElementsFromHistory, deleteElementFromHistory } from '../modules/db/historyManagement.js'
 import { dbPool2 } from '../modules/sketches/herokupgsql.js'
 import { secureRouteMiddleware } from '../middleware/security/secureRouting.js'
+import { getRestrictionIdByName } from '../middleware/getRestrictionIdByName.js'
 
 router.use(json({limit: '200kb'}));
 router.use(urlencoded({extended: true}));
@@ -53,7 +54,7 @@ router.get('/token', getToken);
 router.get('/login', getToken);
 
 router.get('/settings', secureRouteMiddleware, getSettings);
-router.post('/settings', secureRouteMiddleware, postSettings);
+router.post('/settings', secureRouteMiddleware, getRestrictionIdByName, postSettings);
 
 router.get('/history/', checkGetElementsFromHistoryReq, getElementsFromHistory)
 router.delete('/history/:elementID', checkDeleteElementReq, deleteElementFromHistory)

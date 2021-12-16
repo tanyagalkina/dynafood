@@ -29,20 +29,14 @@ export const getSettings = async (req, res) => {
 */
 export const postSettings = async (req, res) => {
     try {
-        let restrictionID = await db_adm_conn.query(`
-            SELECT restrictionID
-            FROM Restriction
-            WHERE restrictionName = '${req.body.restrictionName}'
-        `);
-
         let newSettings = await db_adm_conn.query(`
             INSERT INTO EndUser_Restriction (alertActivation, endUserId, restrictionID)
             SELECT
                 ${req.body.alertActivation},
                 '${req.user.userid}',
-                '${restrictionID.rows[0].restrictionid}'
+                '${req.restrictionID.rows[0].restrictionid}'
             WHERE NOT EXISTS (SELECT * FROM EndUser_Restriction EU
-            WHERE EU.endUserID = '${req.user.userid}' AND EU.restrictionID = '${restrictionID.rows[0].restrictionid}');
+            WHERE EU.endUserID = '${req.user.userid}' AND EU.restrictionID = '${req.restrictionID.rows[0].restrictionid}');
         `);
         res.status(200).send(newSettings.rows);
     } catch (err) {

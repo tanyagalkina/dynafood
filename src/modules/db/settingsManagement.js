@@ -5,7 +5,7 @@ import db_adm_conn from "./index.js";
 export const getSettings = async (req, res) => {
     try {
         let userSettings = await db_adm_conn.query(`
-                SELECT restrictionName FROM Restriction
+                SELECT restrictionName, EndUser_Restriction.alertActivation FROM Restriction
                 JOIN EndUser_Restriction USING (restrictionID)
                 WHERE endUserID = '${checkInputBeforeSqlQuery(req.user.userid)}';`);
         if (userSettings.rows.length == 0) {
@@ -44,3 +44,19 @@ export const postSettings = async (req, res) => {
         res.status(500).send({"Error": err, "Details": err.stack})
     }
 };
+
+
+export const patchSettings = async (req, res) => {
+    try {
+        let newSettings = await db_adm_conn.query(`
+            UPDATE EndUser_Restriction
+            SET alertActivation = ${req.body.alertActivation}
+            WHERE restrictionID = '${req.restrictionID.rows[0].restrictionid}'
+            AND endUserID = '${req.user.userid}';
+        `)
+        res.status(200).send(newSettings.rows);
+    } catch (err) {
+        console.log(err);
+        res.status(500).send({"Error": err, "Details": err.stack})
+    }
+}

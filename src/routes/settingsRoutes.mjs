@@ -17,7 +17,7 @@ import { getRestrictionIdByName, hasRestriction } from '../middleware/settings.j
  *           type: string
  *           description: Name of the restriction.
  *         alertActivation:
- *           type: bool
+ *           type: boolean
  *           description: Idicates if the alerts should be activated for this restriction.
  *     Error:
  *       type: object
@@ -70,11 +70,42 @@ import { getRestrictionIdByName, hasRestriction } from '../middleware/settings.j
 */
 router.get('/settings', secureRouteMiddleware, getSettings);
 
-/*
+/**
  * @swagger
  * /settings:
  *   post:
- *     summary: Adds new settings to the user
+ *     summary: Adds new settings to the user.
+ *     parameters:
+ *       - in: cookie
+ *         name: token
+ *         schema:
+ *           type: JWT
+ *         required: true
+ *         description: JWT user got on login.
+ *       - in: body
+ *         schema:
+ *           type: array
+ *           items:
+ *             $ref: '#/components/schemas/Settings'
+ *     responses:
+ *       200:
+ *         description: No errors.
+ *       500:
+ *         description: Internal server error.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Error'
+*/
+router.post('/settings', secureRouteMiddleware, getRestrictionIdByName, postSettings);
+
+/**
+ * @swagger
+ * /settings:
+ *   patch:
+ *     summary: Modifies the settings of the user.
  *     parameters:
  *       - in: cookie
  *         name: token
@@ -89,15 +120,41 @@ router.get('/settings', secureRouteMiddleware, getSettings);
  *              $ref: '#/components/schemas/Settings'
  *     responses:
  *       200:
- *         description: The list of restrictions.
+ *         description: No errors.
+ *       500:
+ *         description: Internal server error.
  *         content:
  *           application/json:
  *             schema:
  *               type: array
  *               items:
- *                 $ref: '#/components/schemas/Settings'
- *       204:
- *         description: The user has no restrictions.
+ *                 $ref: '#/components/schemas/Error'
+*/
+router.patch('/settings', secureRouteMiddleware, getRestrictionIdByName, hasRestriction, patchSettings);
+
+/**
+ * @swagger
+ * /settings:
+ *   delete:
+ *     summary: Deletes the given setting of the user.
+ *     parameters:
+ *       - in: cookie
+ *         name: token
+ *         schema:
+ *           type: JWT
+ *         required: true
+ *         description: JWT user got on login.
+ *       - in: body
+ *         name: restrictionName
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: The name of the restriction you want to delete.
+ *     responses:
+ *       200:
+ *         description: No errors
+ *       400:
+ *         description: Bad request, if the user does not have a restriction set for the given restriction.
  *         content:
  *           application/json:
  *             schema:
@@ -113,8 +170,6 @@ router.get('/settings', secureRouteMiddleware, getSettings);
  *               items:
  *                 $ref: '#/components/schemas/Error'
 */
-router.post('/settings', secureRouteMiddleware, getRestrictionIdByName, postSettings);
-router.patch('/settings', secureRouteMiddleware, getRestrictionIdByName, hasRestriction, patchSettings);
 router.delete('/settings', secureRouteMiddleware, getRestrictionIdByName, deleteSettings);
 
 

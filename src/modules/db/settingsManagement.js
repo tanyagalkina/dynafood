@@ -9,7 +9,7 @@ export const getSettings = async (req, res) => {
                 JOIN EndUser_Restriction USING (restrictionID)
                 WHERE endUserID = '${checkInputBeforeSqlQuery(req.user.userid)}';`);
         if (userSettings.rows.length == 0) {
-            res.status(204);
+            res.status(204).send();
             return
         }
         res.status(200).send(userSettings.rows);
@@ -39,7 +39,7 @@ export const postSettings = async (req, res) => {
             WHERE EU.endUserID = '${checkInputBeforeSqlQuery(req.user.userid)}'
             AND EU.restrictionID = '${checkInputBeforeSqlQuery(req.restrictionID.rows[0].restrictionid)}');
         `);
-        res.status(200).send(newSettings.rows);
+        res.status(200).send();
     } catch (err) {
         console.log(err);
         res.status(500).send({"Error": err, "Details": err.stack})
@@ -55,7 +55,7 @@ export const patchSettings = async (req, res) => {
             WHERE restrictionID = '${checkInputBeforeSqlQuery(req.restrictionID.rows[0].restrictionid)}'
             AND endUserID = '${checkInputBeforeSqlQuery(req.user.userid)}';
         `)
-        res.status(200).send(newSettings.rows);
+        res.status(200).send();
     } catch (err) {
         console.log(err);
         res.status(500).send({"Error": err, "Details": err.stack})

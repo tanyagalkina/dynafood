@@ -60,3 +60,17 @@ export const patchSettings = async (req, res) => {
         res.status(500).send({"Error": err, "Details": err.stack})
     }
 }
+
+export const deleteSettings = async (req, res) => {
+    try {
+        let newSettings = await db_adm_conn.query(`
+            DELETE FROM EndUser_Restriction
+            WHERE restrictionID = '${req.restrictionID.rows[0].restrictionid}'
+            AND endUserID = '${req.user.userid}';
+        `)
+        res.status(200).send(newSettings.rows);
+    } catch (err) {
+        console.log(err);
+        res.status(500).send({"Error": err, "Details": err.stack})
+    }
+}

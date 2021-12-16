@@ -5,7 +5,7 @@ import { json } from 'express';
 import cookieParser from 'cookie-parser';
 import { getProduct } from '../modules/barcode_scanner.js'
 import { getUser, deleteUser, createUser, getToken } from '../modules/db/userManagement.js'
-import { getSettings, postSettings, patchSettings } from '../modules/db/settingsManagement.js';
+import { getSettings, postSettings, patchSettings, deleteSettings } from '../modules/db/settingsManagement.js';
 //import { getEcho, getUsers } from '../modules/db/index.js'
 import {
     getEcho
@@ -56,6 +56,7 @@ router.get('/login', getToken);
 router.get('/settings', secureRouteMiddleware, getSettings);
 router.post('/settings', secureRouteMiddleware, getRestrictionIdByName, postSettings);
 router.patch('/settings', secureRouteMiddleware, getRestrictionIdByName, patchSettings);
+router.delete('/settings', secureRouteMiddleware, getRestrictionIdByName, deleteSettings);
 
 router.get('/history/', checkGetElementsFromHistoryReq, getElementsFromHistory)
 router.delete('/history/:elementID', checkDeleteElementReq, deleteElementFromHistory)

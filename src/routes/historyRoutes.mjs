@@ -57,7 +57,7 @@ router.get('/history/', secureRouteMiddleware, checkGetElementsFromHistoryReq, g
 
 /**
  * @swagger
- * /history:
+ * /history/{elementID}:
  *   delete:
  *     summary: Deletes a history element from the user doing the request
  *     parameters:

@@ -183,7 +183,7 @@ export const getProduct = async (req, res) => {
             }
             updateHistory(userID, req.params.barcode, response)
             response.nutriments_scores = getNutrimentsScore(product.data.product)
-            response.vegetarian_alert = await checkAlertVegetarian(userID, response)
+            // response.vegetarian_alert = await checkAlertVegetarian(userID, response)
         }
 
         res.status(200).send(response)

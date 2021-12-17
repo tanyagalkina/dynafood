@@ -15,7 +15,7 @@ const getInnerIngredients = (ingredient) => {
                 vegetarian: ingredient.ingredients[i].vegetarian,
                 ingredients : getInnerIngredients(ingredient.ingredients[i])
             }
-            //console.log(tmp.name)
+            console.log(tmp.name)
             if (tmp.vegan) {
                 vegan = true
             }
@@ -55,12 +55,12 @@ const getNutriments = (nutriments) => {
             'saturated fat' : nutriments['saturated-fat_100g'],
             sodium : nutriments.sodium_100g,
             sugars : nutriments.sugars_100g,
-            trans_fat : nutriments['trans-fat_100g'],
-            vitamin_a : nutriments['vitamin-a_100g'],
-            vitamin_b : nutriments['vitamin-b_100g'],
-            vitamin_c : nutriments['vitamin-c_100g'],
-            vitamin_d : nutriments['vitamin-d_100g'],
-            vitamin_e : nutriments['vitamin-e_100g']
+            'trans fat' : nutriments['trans-fat_100g'],
+            'vitamin A' : nutriments['vitamin-a_100g'],
+            'vitamin B' : nutriments['vitamin-b_100g'],
+            'vitamin C' : nutriments['vitamin-c_100g'],
+            'vitamin D' : nutriments['vitamin-d_100g'],
+            'vitamin E' : nutriments['vitamin-e_100g']
         }
     }
     return null
@@ -115,7 +115,6 @@ const getEcoScore = (data) => {
 }
 
 export const getProduct = async (req, res) => {
-    //console.log(req.params.barcode)
     try {
         const userID =req.user.userid//here insert checking for existing acces_token in EndUser and find user
         
@@ -167,7 +166,6 @@ export const getProduct = async (req, res) => {
             updateHistory(userID, req.params.barcode, response)
             response.nutriments_scores = getNutrimentsScore(product.data.product)
         }
-
 
         res.status(200).send(response)
     } catch(error) {

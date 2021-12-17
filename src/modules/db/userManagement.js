@@ -71,7 +71,7 @@ export const createUser = async (req, res) =>
                 true
             ) RETURNING *;`);
         const userid = user.rows[0].enduserid;
-        const token = jwt.sign({ userid: userid, password: req.body.password }, process.env.JWT_SECRET, { expiresIn: "1h" });
+        const token = jwt.sign({ userid: userid }, process.env.JWT_SECRET, { expiresIn: "1h" });
         res.cookie("token", token, {
             httpOnly: true,
         });
@@ -108,7 +108,7 @@ export const getToken = async (req, res) => {
     const correctPassword = await bcrypt.compare(password, user.rows[0].passcode);
     if (user.rows[0].email == email && correctPassword) {
         const userid = user.rows[0].enduserid;
-        const token = jwt.sign({ userid: userid, password: password }, process.env.JWT_SECRET, { expiresIn: "1h" });
+        const token = jwt.sign({ userid: userid }, process.env.JWT_SECRET, { expiresIn: "1h" });
         res.cookie("token", token, {
             httpOnly: true,
         });

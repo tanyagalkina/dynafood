@@ -32,7 +32,6 @@ export const secureRouteMiddleware = (req, res, next) => {
             if (header_token.indexOf("Bearer ") != 0)
                 throw "no valid bearer"
             header_token = header_token.substring(7)
-            console.log(header_token)
             const user = jwt.verify(header_token, process.env.JWT_SECRET);
             req.user = user;
             if (!checkUserExists(user))

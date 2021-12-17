@@ -26,7 +26,7 @@ const getInnerIngredients = (ingredient) => {
         }
         return ({vegan: vegan, vegetarian: vegetarian, ingredients: inner})
     }
-    return null
+    return {vegan: null, vegetarian: null, ingredients: []}
 }
 
 const getAllAllergenes = (hierarchy) => {
@@ -157,7 +157,7 @@ export const getProduct = async (req, res) => {
                 response.images = null;
             else
                 response.images = data["image_small_url"];
-            if (product.data.product && product.data.product.ingredients) {
+            if (product.data.product) {
                 response.ingredients = getInnerIngredients(product.data.product)
             }
             if (product.data.product && product.data.product.nutriments) {

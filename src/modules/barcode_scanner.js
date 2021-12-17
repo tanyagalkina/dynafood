@@ -55,12 +55,12 @@ const getNutriments = (nutriments) => {
             'saturated fat' : nutriments['saturated-fat_100g'],
             sodium : nutriments.sodium_100g,
             sugars : nutriments.sugars_100g,
-            'trans-fat' : nutriments['trans-fat_100g'],
-            'Vitamin A' : nutriments['vitamin-a_100g'],
-            'Vitamin B' : nutriments['vitamin-b_100g'],
-            'Vitamin C' : nutriments['vitamin-c_100g'],
-            'Vitamin D' : nutriments['vitamin-d_100g'],
-            'Vitamin E' : nutriments['vitamin-e_100g']
+            'trans fat' : nutriments['trans-fat_100g'],
+            'vitamin A' : nutriments['vitamin-a_100g'],
+            'vitamin B' : nutriments['vitamin-b_100g'],
+            'vitamin C' : nutriments['vitamin-c_100g'],
+            'vitamin D' : nutriments['vitamin-d_100g'],
+            'vitamin E' : nutriments['vitamin-e_100g']
         }
     }
     return null
@@ -167,7 +167,6 @@ export const getProduct = async (req, res) => {
             insertIntoHistory(userID, req.params.barcode, response)
             response.nutriments_scores = getNutrimentsScore(product.data.product)
         }
-
 
         res.status(200).send(response)
     } catch(error) {

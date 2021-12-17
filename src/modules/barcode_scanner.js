@@ -2,6 +2,8 @@
 import axios from 'axios';
 import https from 'https';
 import { updateHistory } from './db/historyManagement.js'
+import { db_adm_conn } from './db/index.js'
+import { checkInputBeforeSqlQuery } from './db/scripts.js';
 
 const getInnerIngredients = (ingredient) => {
     let inner = []
@@ -114,6 +116,21 @@ const getEcoScore = (data) => {
     return ret
 }
 
+export const checkAlertVegetarian = async (userid, product) => {
+    if (product.ingredients.vegetarian) {
+        let response = await await db_adm_conn.query(`
+        SELECT R.restrictionName, ER.alertActivation 
+        FROM Restriction R
+        LEFT JOIN EndUser_Restriction ER ON ER.restrictionID = R.restrictionID
+        WHERE ER.endUserID = '${checkInputBeforeSqlQuery(req.user.userid)}'
+            AND R.restrivtionName = 'vegetarian';`);
+        if (response.rows.length > 0 && response.rows[0].alertActivation) {
+            return true
+        }
+    }
+    return false
+}
+
 export const getProduct = async (req, res) => {
     try {
         const userID =req.user.userid//here insert checking for existing acces_token in EndUser and find user
@@ -130,7 +147,8 @@ export const getProduct = async (req, res) => {
             images: [],
             ingredients: [],
             nutriments_g_pro_100g: [],
-            nutriments_scores: []
+            nutriments_scores: [],
+            vegetarian_alert: false
         }
         const url = `https://world.openfoodfacts.org/api/2/product/${req.params.barcode}.json`
         const product = await axios.get(url)
@@ -165,6 +183,7 @@ export const getProduct = async (req, res) => {
             }
             updateHistory(userID, req.params.barcode, response)
             response.nutriments_scores = getNutrimentsScore(product.data.product)
+            response.vegetarian_alert = checkAlertVegetarian(userID, response)
         }
 
         res.status(200).send(response)

@@ -1,7 +1,7 @@
 
 import axios from 'axios';
 import https from 'https';
-import { insertIntoHistory } from './db/historyManagement.js'
+import { updateHistory } from './db/historyManagement.js'
 
 const getInnerIngredients = (ingredient) => {
     let inner = []
@@ -164,8 +164,7 @@ export const getProduct = async (req, res) => {
             if (product.data.product && product.data.product.nutriments) {
                 response.nutriments_g_pro_100g = getNutriments(product.data.product.nutriments)
             }
-            console.log(response.nutriments_g_pro_100g);
-            insertIntoHistory(userID, req.params.barcode, response)
+            updateHistory(userID, req.params.barcode, response)
             response.nutriments_scores = getNutrimentsScore(product.data.product)
         }
 

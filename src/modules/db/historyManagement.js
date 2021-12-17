@@ -1,6 +1,41 @@
 import db_adm_conn from "./index.js";
 import { checkInputBeforeSqlQuery } from './scripts.js';
 
+export const updateHistory = async (userID, barcode, product) => {
+    let response = await db_adm_conn.query(`
+    SELECT COUNT (historyId) 
+    FROM History
+    WHERE barcode = '${checkInputBeforeSqlQuery(barcode)}'
+        AND enduserId = '${checkInputBeforeSqlQuery(userID)}';`)
+    if (response.rows[0].count == 1) {
+        await updateHistoryElement(userID, barcode, product)
+    } else { 
+        if (response.rows[0].count > 1) {
+            await cleanDublicateHistory(userID, barcode)
+        }
+        await insertIntoHistory(userID, barcode, product)
+    }
+}
+
+export const cleanDublicateHistory = async (userID, barcode) => {
+    let response = await db_adm_conn.query(`
+    DELETE
+    FROM History
+    WHERE barcode = '${checkInputBeforeSqlQuery(barcode)}'
+        AND enduserId = '${checkInputBeforeSqlQuery(userID)}';`)
+}
+
+export const updateHistoryElement = async (userID, barcode, product) => {
+    product.name = checkInputBeforeSqlQuery(product.name);
+    product.images = checkInputBeforeSqlQuery(product.images);
+    let response = await db_adm_conn.query(`
+    UPDATE History
+    SET (lastused, productName, pictureLink)
+         = (current_timestamp, '${product.name}', '${product.images}')
+    WHERE barcode = '${checkInputBeforeSqlQuery(barcode)}'
+        AND enduserId = '${checkInputBeforeSqlQuery(userID)}';`)
+}
+
 export const insertIntoHistory = async (userID, barcode, product) => {
 
     userID = checkInputBeforeSqlQuery(userID);

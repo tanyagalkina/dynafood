@@ -6,7 +6,7 @@ export const getSettings = async (req, res) => {
     try {
         let userSettings = await db_adm_conn.query(`
                 SELECT R.restrictionName, ER.alertActivation 
-                FROM Restriction
+                FROM Restriction R
                 LEFT JOIN EndUser_Restriction ER USING (restrictionID)
                 WHERE R.endUserID = '${checkInputBeforeSqlQuery(req.user.userid)}';`);
         if (userSettings.rows.length == 0) {

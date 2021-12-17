@@ -5,9 +5,10 @@ import db_adm_conn from "./index.js";
 export const getSettings = async (req, res) => {
     try {
         let userSettings = await db_adm_conn.query(`
-                SELECT restrictionName, EndUser_Restriction.alertActivation FROM Restriction
-                JOIN EndUser_Restriction USING (restrictionID)
-                WHERE endUserID = '${checkInputBeforeSqlQuery(req.user.userid)}';`);
+                SELECT R.restrictionName, ER.alertActivation 
+                FROM Restriction
+                LEFT JOIN EndUser_Restriction ER USING (restrictionID)
+                WHERE R.endUserID = '${checkInputBeforeSqlQuery(req.user.userid)}';`);
         if (userSettings.rows.length == 0) {
             res.status(204).send();
             return

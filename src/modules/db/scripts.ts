@@ -1,6 +1,4 @@
-export const checkInputBeforeSqlQuery = (arg) => {
-    if (!arg)
-        return;
+export const checkInputBeforeSqlQuery = (arg: string): string => {
     arg = arg.replace("'", "''");
 
     return arg;

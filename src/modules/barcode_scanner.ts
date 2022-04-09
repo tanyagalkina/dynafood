@@ -4,15 +4,15 @@ import https from 'https';
 import { updateHistory } from './db/historyManagement'
 import { db_adm_conn } from './db/index'
 import { checkInputBeforeSqlQuery } from './db/scripts';
-
-const getInnerIngredients = (ingredient) => {
+import { Request, Response } from 'express';
+const getInnerIngredients = (ingredient: any): {vegan: boolean | null, vegetarian: boolean | null, ingredients: Array<any>} => {
     let inner = []
     let vegan = true
     let vegetarian = true
     if (typeof ingredient.ingredients != "undefined" && ingredient.ingredients != null) {
         for (var i = 0; i  < ingredient.ingredients.length; i++) {
             var tmp = {
-                name: ingredient.ingredients[i].text.toLowerCase().replace(/(^\w{1})|(\s{1}\w{1})/g, match => match.toUpperCase()),
+                name: ingredient.ingredients[i].text.toLowerCase().replace(/(^\w{1})|(\s{1}\w{1})/g, (match: string) => match.toUpperCase()),
                 vegan: ingredient.ingredients[i].vegan,
                 vegetarian: ingredient.ingredients[i].vegetarian,
                 ingredients : getInnerIngredients(ingredient.ingredients[i])
@@ -31,8 +31,8 @@ const getInnerIngredients = (ingredient) => {
     return {vegan: null, vegetarian: null, ingredients: []}
 }
 
-const getAllAllergenes = (hierarchy) => {
-    let allergenes = [];
+const getAllAllergenes = (hierarchy: Array<any>) : Array<any> => {
+    let allergenes: Array<any> = [];
     if (typeof hierarchy != "undefined" && hierarchy != null) {
         hierarchy.forEach((entry) => {
             allergenes.push(entry.substring(entry.indexOf(":") + 1));
@@ -42,7 +42,7 @@ const getAllAllergenes = (hierarchy) => {
     return allergenes;
 }
 
-const getNutriments = (nutriments) => {
+const getNutriments = (nutriments: any): any => {
     if (typeof nutriments != "undefined" && nutriments != null) {
         return {
             calcium : nutriments.calcium_100g,
@@ -68,8 +68,35 @@ const getNutriments = (nutriments) => {
     return null
 }
 
-const getNutrimentsScore = (data) => {
-    let ret = {
+const getNutrimentsScore = (data: any): {
+    energy_points: null | number, 
+        fiber_points : null | number,
+        negative_points : null | number,
+        positive_points : null | number,
+        proteins_points : null | number,
+        saturated_fat_points : null | number,
+        sodium_points : null | number,
+        sugars_points : null | number,
+        total_grade: null | number,
+        total_score: null | number,
+} => {
+    if (typeof data.nutriscore_data != "undefined" && data.nutriscore_data != null) {
+        var ret = {
+        energy_points : data.nutriscore_data.energy_points,
+        fiber_points : data.nutriscore_data.fiber_points,
+        negative_points : data.nutriscore_data.negative_points,
+        positive_points : data.nutriscore_data.positive_points,
+        proteins_points : data.nutriscore_data.proteins_points,
+        saturated_fat_points : data.nutriscore_data.saturated_fat_points,
+        sodium_points : data.nutriscore_data.sodium_points,
+        sugars_points : data.nutriscore_data.sugars_points,
+        total_score : 0,
+        total_grade : data.nutriscore_grade
+        }
+        if (ret.negative_points && ret.positive_points)
+            ret.total_score = ret.positive_points - ret.negative_points
+    }
+    return  {
         energy_points : null,
         fiber_points : null,
         negative_points : null,
@@ -81,22 +108,16 @@ const getNutrimentsScore = (data) => {
         total_grade: null,
         total_score: null,
     }
-    if (typeof data.nutriscore_data != "undefined" && data.nutriscore_data != null) {
-        ret.energy_points = data.nutriscore_data.energy_points
-        ret.fiber_points = data.nutriscore_data.fiber_points
-        ret.negative_points = data.nutriscore_data.negative_points
-        ret.positive_points = data.nutriscore_data.positive_points
-        ret.proteins_points = data.nutriscore_data.proteins_points
-        ret.saturated_fat_points = data.nutriscore_data.saturated_fat_points
-        ret.sodium_points = data.nutriscore_data.sodium_points
-        ret.sugars_points = data.nutriscore_data.sugars_points
-    }
-    ret.total_grade = data.nutriscore_grade
-    ret.total_score = ret.positive_points - ret.negative_points
-    return ret
 }
 
-const getEcoScore = (data) => {
+const getEcoScore = (data: any): {
+    eco_grade : null | string | number,
+        eco_score : null | string | number,
+        epi_score : null | string | number,
+        transportation_scores : any, // subdivided in countries // mostly empty
+        packaging : any, // information about packaging, // mostly empty
+        agribalyse : any,
+} => {
     let ret = {
         eco_grade : null,
         eco_score : null,
@@ -116,7 +137,7 @@ const getEcoScore = (data) => {
     return ret
 }
 
-export const checkAlertVegetarian = async (userid, product) => {
+export const checkAlertVegetarian = async (userid: string, product: any) => {
     if (product.ingredients.vegetarian) {
         let response = await db_adm_conn.query(`
         SELECT R.restrictionName, ER.alertActivation 
@@ -133,24 +154,24 @@ export const checkAlertVegetarian = async (userid, product) => {
 
 export const getProduct = async (req: Request, res: Response) => {
     try {
-        const userID =req.body.user.userid//here insert checking for existing acces_token in EndUser and find user
+        const userID =res.locals.user.userid//here insert checking for existing acces_token in EndUser and find user
         
         let response = {
             name: null,
             keywords: [],
-            allergens: [],
+            allergens: <any>[],
             categories: [],
             qualities: [],
             warings: [],
-            ecoscoreData: null,
+            ecoscoreData: <any>null,
             packing: [],
-            images: [],
-            ingredients: [],
+            images: <any>[],
+            ingredients: <any>[],
             nutriments_g_pro_100g: [],
-            nutriments_scores: [],
+            nutriments_scores: <any>[],
             vegetarian_alert: false
         }
-        const url = `https://world.openfoodfacts.org/api/2/product/${req.params.barcode}.tson`
+        const url = `https://world.openfoodfacts.org/api/2/product/${req.params.barcode}.json`
         const product = await axios.get(url)
         if (typeof product === "undefined" || product == null) {
             res.status(500).send({error: "undefined response from OpenFoodFacts Api"})

@@ -16,7 +16,6 @@ const server = new http.Server(app);
 import cookieParser from 'cookie-parser';
 import jwt from 'express-jwt';
 import cors from 'cors'; //dont know what is it for
-import { poolExample } from './src/modules/db/index'
 import { dbPool2} from './src/modules/sketches/herokupgsql'
 
 const options = {

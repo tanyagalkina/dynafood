@@ -10,7 +10,7 @@ export const getRestrictionIdByName = async (req: Request, res: Response, next: 
             WHERE restrictionName = '${req.body.restrictionName}'
         `);
 
-        req.body.restrictionID = restrictionID;
+        res.locals.restrictionID = restrictionID.rows[0].restrictionid;
         next();
     } catch (err: any) {
         console.error(err);
@@ -22,8 +22,8 @@ export const hasRestriction = async (req: Request, res: Response, next: NextFunc
     try {
         let restriction = await db_adm_conn.query(`
             SELECT * FROM EndUser_Restriction
-            WHERE endUserID = '${checkInputBeforeSqlQuery(req.body.user.userid)}'
-            AND restrictionID = '${checkInputBeforeSqlQuery(req.body.restrictionID.rows[0].restrictionid)}'
+            WHERE endUserID = '${checkInputBeforeSqlQuery(res.locals.user.userid)}'
+            AND restrictionID = '${checkInputBeforeSqlQuery(res.locals.restrictionID)}'
         `)
 
         if (restriction.rowCount == 0) {

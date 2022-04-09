@@ -2,22 +2,19 @@ import { db_adm_conn } from "./index";
 import { checkInputBeforeSqlQuery } from './scripts';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt'
-
-const parseGetUserResponse = (rows) => {
+import { Request, Response } from "express";
+const parseGetUserResponse = (rows: Array<{firstname: string, lastname: string, username: string, phonenumber: string, email: string, restrictionName: string, alertactivation: boolean}>) => {
     let userObj = {
         firstName : rows[0].firstname,     
         lastName : rows[0].lastname,
         userName : rows[0].username,
         email : rows[0].email,
         phoneNumber : rows[0].phonenumber,
-        restrictons: []
+        restrictons: <any>[]
     };
     for (var row of rows) {
-        if (row.restrictionName != null)
-        userObj.restrictons.push( {
-            alertActivation: row.alertactivation,
-            restrictionName: row.restrictionname
-        });
+        if (row.restrictionName.length != 0) 
+            userObj.restrictons.push({alertactivation: row.alertactivation, restrictionName: row.restrictionName});
     }
     return userObj;
 };
@@ -29,13 +26,13 @@ export const getUser = async (req: Request, res: Response) => {
         FROM EndUser EU
         LEFT JOIN EndUser_Restriction ER ON ER.endUserID = EU.endUserID
         LEFT JOIN Restriction R ON R.restrictionID = ER.restrictionID
-        WHERE EU.endUserID = '${checkInputBeforeSqlQuery(req.body.user.userid)}';`);
+        WHERE EU.endUserID = '${checkInputBeforeSqlQuery(res.locals.user.userid)}';`);
         if (newUser.rows.length == 0) {
             res.status(404).send("There is no EndUser with this id.");
             return;
         }
         res.send(parseGetUserResponse(newUser.rows));
-    } catch(err) {
+    } catch (err: any) {
         console.log(err.stack);
         res.status(500).send({"Error": err, "Details": err.stack});
     }
@@ -46,7 +43,7 @@ export const deleteUser = async (req: Request, res: Response) => {
     try {
         let response = await db_adm_conn.query(`
         DELETE FROM EndUser
-        WHERE endUserID = '${checkInputBeforeSqlQuery(req.body.user.userid)}' RETURNING *;`);
+        WHERE endUserID = '${checkInputBeforeSqlQuery(res.locals.user.userid)}' RETURNING *;`);
         res.send({"Deleted": response.rows});
     } catch (err: any) {
         console.log(err.stack);
@@ -71,7 +68,7 @@ export const createUser = async (req: Request, res: Response) =>
                 true
             ) RETURNING *;`);
         const userid = user.rows[0].enduserid;
-        const token = jwt.sign({ userid: userid }, process.env.JWT_SECRET, { expiresIn: "1h" });
+        const token = jwt.sign({ userid: userid }, <string>process.env.JWT_SECRET, { expiresIn: "1h" });
         res.cookie("token", token, {
             httpOnly: true,
         });
@@ -86,7 +83,7 @@ export const createUser = async (req: Request, res: Response) =>
 
 export const getToken = async (req: Request, res: Response) => {
     const email = req.query.email;
-    const password = req.query.password;
+    const password = <string>req.query.password;
 
     const user = await db_adm_conn.query(`
         SELECT *
@@ -105,10 +102,10 @@ export const getToken = async (req: Request, res: Response) => {
         return;
     }
 
-    const correctPassword = await bcrypt.compare(password, user.rows[0].passcode);
+    const correctPassword = bcrypt.compare(password, user.rows[0].passcode);
     if (user.rows[0].email == email && correctPassword) {
         const userid = user.rows[0].enduserid;
-        const token = jwt.sign({ userid: userid }, process.env.JWT_SECRET, { expiresIn: "1h" });
+        const token = jwt.sign({ userid: userid }, <string>process.env.JWT_SECRET, { expiresIn: "1h" });
         res.cookie("token", token, {
             httpOnly: true,
         });

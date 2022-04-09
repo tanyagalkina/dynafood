@@ -40,7 +40,7 @@ const schema = Joi.object({
 })
 
 export const checkUserIdReq = (req: Request, res: Response, next: NextFunction) => {
-    if (typeof req.body.user.userid == 'undefined' || req.body.user.userid === null) {
+    if (typeof res.locals.user.userid == 'undefined' || res.locals.user.userid === null) {
         res.status(400).send({"Error": "No valid token provided."})
         return
     }

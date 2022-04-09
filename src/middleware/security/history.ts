@@ -14,10 +14,10 @@ export const checkDeleteElementReq = async (req: Request<{elementID: string}>, r
     next()
 }
 
-export const checkGetElementsFromHistoryReq = async (req: Request<{userid: string}>, res: Response, next: Function) => {
+export const checkGetElementsFromHistoryReq = async (req: Request, res: Response, next: Function) => {
     //check access_token here
 
-    var userID = req.body.userid
+    var userID = res.locals.user.userid
     if (typeof userID == "undefined" || userID == null) {
         res.status(400).send('userID is missing')
         return

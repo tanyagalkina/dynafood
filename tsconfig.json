@@ -1,13 +1,13 @@
 {
     "compilerOptions": {
-      "target": "es5",
+      "target": "es2016",
       "module": "commonjs",
       "esModuleInterop": true,
-      "moduleResolution": "node",
-      "declaration": true,
+      // "moduleResolution": "node",
+      // "declaration": true,
       "outDir": "./lib",
       "strict": true,
-      "allowJs": true
+      // "allowJs": true
     },
     "include": ["./src/**/*", "server.ts"],
     "exclude": ["node_modules", "**/__tests__/*"]

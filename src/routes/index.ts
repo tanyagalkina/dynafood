@@ -3,12 +3,12 @@ const router = Router();
 import { urlencoded } from 'express';
 import { json } from 'express';
 import cookieParser from 'cookie-parser';
+import { Request, Response } from 'express';
 //import { getEcho, getUsers } from '../modules/db/index'
 import {
     getEcho
    ,getUsers
    ,whatTimePGQL
-   ,poolExample
    ,showTables } from '../modules/db/index'
 import logger from '../middleware/logger'
 
@@ -29,7 +29,6 @@ router.get('/welcome', (req: Request, res: Response) => {
 //DB TEST FUNCS
 router.get('/pg', dbPool2)
 router.get('/pgtables', showTables)
-router.get('/time', poolExample)
 
 
 router.get('/echo', getEcho)

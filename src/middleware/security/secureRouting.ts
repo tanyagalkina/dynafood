@@ -20,7 +20,7 @@ export const secureRouteMiddleware = (req: Request, res: Response, next: NextFun
     if (typeof token != "undefined" && token != null) {
         try {
             const user = <any>(jwt.verify(token, <string>process.env.JWT_SECRET));
-            req.body.user = user
+            res.locals.user = user
             if (!checkUserExists(user))
                 throw  "user does not exist"
             next();
@@ -35,7 +35,7 @@ export const secureRouteMiddleware = (req: Request, res: Response, next: NextFun
                 throw "no valid bearer"
             header_token = header_token.substring(7)
             const user = <any>(jwt.verify(header_token, <string>process.env.JWT_SECRET));
-            req.body.user = user;
+            res.locals.user = user;
             if (!checkUserExists(user))
                 throw  "user does not exist"
             next();

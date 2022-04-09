@@ -4,7 +4,7 @@ import pg from 'pg'
 const Pool = pg.Pool;
 
 import { PG_USER, PG_PASSWORD, PG_DATABASE, NODE_ENV, PG_HOST, PG_PORT, DATABASE_URL } from '../../config/index'
-
+import { Response, Request } from 'express';
 const isProduction = process.env.NODE_ENV === "production";
 //THIS URI IS NOT STATIC !!! NOT IN USE
 const db_uri = "postgres://enpwwhercphrri:6b23f247ecde2bf94b70d9be61d3e5fa037cc0bc3f360a6626933d955a48a608@ec2-52-208-185-143.eu-west-1.compute.amazonaws.com:5432/dfeof044pkurt3";

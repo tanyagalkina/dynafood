@@ -5,7 +5,7 @@
       "esModuleInterop": true,
       // "moduleResolution": "node",
       // "declaration": true,
-      "outDir": "./lib",
+      "outDir": "./",
       "strict": true,
       // "allowJs": true
     },

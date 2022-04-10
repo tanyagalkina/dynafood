@@ -7,7 +7,7 @@ export const checkUserExists = async (user: {userid: string}) => {
     if (typeof user.userid == "undefined" || user.userid == null)
         return false
     let response = await db_adm_conn.query(`
-    SELECT COUNT enduserid FROM enduser WHERE enduserid = '${checkInputBeforeSqlQuery(user.userid)}`)
+    SELECT COUNT(enduserid) FROM enduser WHERE enduserid = '${checkInputBeforeSqlQuery(user.userid)}'`)
     if (response.rows[0].count == 1) {
         return true
     }

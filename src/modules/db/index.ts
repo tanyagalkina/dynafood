@@ -1,7 +1,8 @@
 import pg from 'pg'
 import { Request, Response } from 'express';
 import { PG_USER, PG_PASSWORD, PG_HOST, PG_PORT, PG_DATABASE } from '../../config/index';
-
+import * as dotenv from 'dotenv'
+dotenv.config()
 const Client = pg.Client;
 const Pool = pg.Pool;
 

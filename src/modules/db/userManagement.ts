@@ -13,6 +13,8 @@ const parseGetUserResponse = (rows: Array<{firstname: string, lastname: string, 
         restrictons: <any>[]
     };
     for (var row of rows) {
+        if (!row.restrictionname)
+            continue;
         if (row.restrictionname.length != 0) 
             userObj.restrictons.push({alertactivation: row.alertactivation, restrictionName: row.restrictionname});
     }
@@ -102,7 +104,7 @@ export const getToken = async (req: Request, res: Response) => {
         return;
     }
 
-    const correctPassword = bcrypt.compare(password, user.rows[0].passcode);
+    const correctPassword = await bcrypt.compare(password, user.rows[0].passcode);
     if (user.rows[0].email == email && correctPassword) {
         const userid = user.rows[0].enduserid;
         const token = jwt.sign({ userid: userid }, <string>process.env.JWT_SECRET, { expiresIn: "1h" });

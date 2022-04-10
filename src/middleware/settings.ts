@@ -10,7 +10,7 @@ export const getRestrictionIdByName = async (req: Request, res: Response, next: 
             WHERE restrictionName = '${req.body.restrictionName}'
         `);
         if (restrictionID.rowCount === 0) {
-            res.status(404).json({"Error" : `The restriction ${req.body.restrictionName} is not availeble on dynafood!`})
+            res.status(404).json({"Error" : `The restriction ${req.body.restrictionName} is not available on dynafood!`})
             return
         }
         res.locals.restrictionID = restrictionID.rows[0].restrictionid;

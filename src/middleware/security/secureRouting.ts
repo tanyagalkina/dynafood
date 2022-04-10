@@ -14,14 +14,14 @@ export const checkUserExists = async (user: {userid: string}) => {
     return false
 }
 
-export const secureRouteMiddleware = (req: Request, res: Response, next: NextFunction) => {
+export const secureRouteMiddleware = async (req: Request, res: Response, next: NextFunction) => {
     const token = req.cookies.token;
     let header_token = req.headers['authorization']
     if (typeof token != "undefined" && token != null) {
         try {
             const user = <any>(jwt.verify(token, <string>process.env.JWT_SECRET));
             res.locals.user = user
-            if (!checkUserExists(user))
+            if (!await checkUserExists(user))
                 throw  "user does not exist"
             next();
         } catch(error) {
@@ -36,7 +36,7 @@ export const secureRouteMiddleware = (req: Request, res: Response, next: NextFun
             header_token = header_token.substring(7)
             const user = <any>(jwt.verify(header_token, <string>process.env.JWT_SECRET));
             res.locals.user = user;
-            if (!checkUserExists(user))
+            if (!await checkUserExists(user))
                 throw  "user does not exist"
             next();
         } catch(error) {

@@ -3,7 +3,7 @@ import { checkInputBeforeSqlQuery } from './scripts';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt'
 import { Request, Response } from "express";
-const parseGetUserResponse = (rows: Array<{firstname: string, lastname: string, username: string, phonenumber: string, email: string, restrictionName: string, alertactivation: boolean}>) => {
+const parseGetUserResponse = (rows: Array<{firstname: string, lastname: string, username: string, phonenumber: string, email: string, restrictionname: string, alertactivation: boolean}>) => {
     let userObj = {
         firstName : rows[0].firstname,     
         lastName : rows[0].lastname,
@@ -13,8 +13,8 @@ const parseGetUserResponse = (rows: Array<{firstname: string, lastname: string, 
         restrictons: <any>[]
     };
     for (var row of rows) {
-        if (row.restrictionName.length != 0) 
-            userObj.restrictons.push({alertactivation: row.alertactivation, restrictionName: row.restrictionName});
+        if (row.restrictionname.length != 0) 
+            userObj.restrictons.push({alertactivation: row.alertactivation, restrictionName: row.restrictionname});
     }
     return userObj;
 };

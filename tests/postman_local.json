@@ -672,45 +672,6 @@
 			"response": []
 		},
 		{
-			"name": "User without restrictions",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							"pm.test(\"Status code is 200\", function () {",
-							"    pm.response.to.have.status(200);",
-							"});",
-							"pm.test(\"validate response data\", function () {",
-							"    var jsonData = pm.response.json();",
-							"    pm.expect(jsonData.firstName).to.eql(\"TestUser\");",
-							"    pm.expect(jsonData.lastName).to.eql(\"TestUser\");",
-							"    pm.expect(jsonData.userName).to.eql(\"TestUser\");",
-							"    pm.expect(jsonData.email).to.eql(\"test@gmail.com\");",
-							"    pm.expect(jsonData.phoneNumber).to.eql(\"123123123\");",
-							"    pm.expect(jsonData.restrictons).to.eql([]);",
-							"});"
-						],
-						"type": "text/javascript"
-					}
-				}
-			],
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "{{base_url}}/user",
-					"host": [
-						"{{base_url}}"
-					],
-					"path": [
-						"user"
-					]
-				}
-			},
-			"response": []
-		},
-		{
 			"name": "Login",
 			"event": [
 				{
@@ -765,6 +726,45 @@
 							"key": "password",
 							"value": "{{test_password}}"
 						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "User without restrictions",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"pm.test(\"validate response data\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.firstName).to.eql(\"TestUser\");",
+							"    pm.expect(jsonData.lastName).to.eql(\"TestUser\");",
+							"    pm.expect(jsonData.userName).to.eql(\"TestUser\");",
+							"    pm.expect(jsonData.email).to.eql(\"test@gmail.com\");",
+							"    pm.expect(jsonData.phoneNumber).to.eql(\"123123123\");",
+							"    pm.expect(jsonData.restrictons).to.eql([]);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/user",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"user"
 					]
 				}
 			},
@@ -1141,9 +1141,9 @@
 							"    pm.expect(jsonData.userName).to.eql(\"TestUser\");",
 							"    pm.expect(jsonData.email).to.eql(\"test@gmail.com\");",
 							"    pm.expect(jsonData.phoneNumber).to.eql(\"123123123\");",
-							"    pm.expect(jsonData.restrictons).to.be.an([{",
-							"        \"restrictionname\": \"peanut\",",
-							"        \"alertactivation\": true",
+							"    pm.expect(jsonData.restrictons).to.eql([{",
+							"            \"alertactivation\": true,",
+							"            \"restrictionName\": \"peanut\"",
 							"    }]);",
 							"});"
 						],
@@ -1224,7 +1224,7 @@
 							"",
 							"pm.test(\"TODO: Check correct Error message\", function () {",
 							"    var jsonData = pm.response.json();",
-							"    pm.expect(jsonData.Error).to.eql(\"User has no restriction called 'peanutsdfa'\");",
+							"    pm.expect(jsonData.Error).to.eql(\"The restriction peanutsdfa is not available on dynafood!\");",
 							"});"
 						],
 						"type": "text/javascript"
@@ -1389,6 +1389,7 @@
 							"// deleting jwt because the following requests should not have a valid token",
 							"const cookieJar = pm.cookies.jar();",
 							"cookieJar.unset(\"https://dynafood.herokuapp.com\", \"token\", (error) => {});",
+							"cookieJar.unset(\"localhost\", \"token\", (error) => {});",
 							""
 						],
 						"type": "text/javascript"
@@ -1669,7 +1670,8 @@
 	"variable": [
 		{
 			"key": "base_url",
-			"value": "https://dynafood.herokuapp.com"
+			"value": "https://dynafood.herokuapp.com",
+			"disabled": true
 		},
 		{
 			"key": "test_email",
@@ -1682,6 +1684,10 @@
 		{
 			"key": "history_id",
 			"value": ""
+		},
+		{
+			"key": "base_url",
+			"value": "localhost:8081"
 		}
 	]
 }

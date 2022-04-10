@@ -8,7 +8,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - run: npm install && tsc && npm start & sleep 100; killall node
+      - run: npm install && tsc && npm start
       - uses: matt-ball/newman-action@master
         with:
           collection: ./tests/postman_local.json
+      - run: killall node

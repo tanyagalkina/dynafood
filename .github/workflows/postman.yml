@@ -8,6 +8,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+      - run: sed -i 's/localhost:8081/https:\/\/dynafood.herokuapp.com"/g' ./tests/postman_local.json
       - uses: matt-ball/newman-action@master
         with:
-          collection: ./tests/postman_heroku.json
+          collection: ./tests/postman_local.json

@@ -1,0 +1,14 @@
+name: Run postman tests
+
+on:
+  push:
+    branches: [ development ]
+jobs:
+  run_postman_test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - run: npm install && tsc && npm start & sleep 100; killall node
+      - uses: matt-ball/newman-action@master
+        with:
+          collection: ./tests/postman_local.json
